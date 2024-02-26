@@ -140,10 +140,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa528b93ce8d0274a8b75c6fac1dc9e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rows: 32
-  columns: 32
   gridObject: {fileID: 3921366078038764537, guid: e456d25c30e47e64b939eb35f4ef4611, type: 3}
   testBuilding: {fileID: 8229335894406183074, guid: e1dfa7f7a56281f4f968de3537bc9344, type: 3}
+  testRoad: {fileID: 6574761903895304511, guid: 42f39f5c8f8220d48a34981cc7c510ae, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
