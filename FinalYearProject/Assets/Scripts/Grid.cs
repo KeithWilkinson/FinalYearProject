@@ -11,7 +11,8 @@ public class Grid : MonoBehaviour
     public GameObject testBuilding;
     public GameObject testRoad;
     private int[,] cells = new int[rows, columns];
-    private int _path = 10;
+    private int _verticalPath = 10;
+    private int _horizontalPath = 10;
   
     void Start()
     {
@@ -31,14 +32,21 @@ public class Grid : MonoBehaviour
                 cells[row, col] = 0;
                 var number = Random.Range(0,10);
                 // Place building (PROTOTYPE FUNCTIONALITY)
-                if(row == 5 && col < _path)
+                if(row == 5 && col < _verticalPath)
                 {
                     //GenerateBuilding(row, col);
                     GenerateRoad(row, col);
                     cells[row, col] = 1;
                 }
 
-                if(number % 2 == 0 && cells[row, col] == 0)
+                if (col == 7 && row < _horizontalPath)
+                {
+                    //GenerateBuilding(row, col);
+                    GenerateRoad(row, col);
+                    cells[row, col] = 1;
+                }
+
+                if (number % 2 == 0 && cells[row, col] == 0)
                 {
                     GenerateBuilding(row, col);
                     cells[row, col] = 1;
