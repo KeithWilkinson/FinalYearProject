@@ -5,70 +5,132 @@ using UnityEngine;
 // Object "GridOrigin" is the point from which the grid is generated from
 public class Grid : MonoBehaviour
 {
-    public static int rows = 10;
-    public static int columns = 10;
+    public static int rows = 50;
+    public static int columns = 50;
     public GameObject gridObject;
     public GameObject testBuilding;
     public GameObject testRoad;
     private int[,] cells = new int[rows, columns];
-    private int _verticalPath = 10;
-    private int _horizontalPath = 10;
+    private int _verticalPath;
+    private int _horizontalPath;
+    public Material[] buildingMat;
   
     void Start()
     {
+        //_verticalPath = columns;
+        //_horizontalPath = rows;
         GenerateGrid();
     }
 
     // Generate grid rows and columns
     void GenerateGrid()
     {
-        for (int row = 0; row < rows; row++)
+        for (int i = 0; i < rows; i++)
         {
-            for (int col = 0; col < columns; col++)
+            for (int j = 0; j < columns; j++)
             {
-              
-                Vector3 position = new Vector3(col, 0, row);
+                // Generates grid
+                Vector3 position = new Vector3(j, 0, i);
                 Instantiate(gridObject, position, Quaternion.identity, transform);
-                cells[row, col] = 0;
-                var number = Random.Range(0,10);
-                // Place building (PROTOTYPE FUNCTIONALITY)
-                if(row == 5 && col < _verticalPath)
+
+                cells[i, j] = 0;
+
+                switch (i)
                 {
-                    //GenerateBuilding(row, col);
-                    GenerateRoad(row, col);
-                    cells[row, col] = 1;
+                    case 1:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
+                    case 10:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
+                    case 20:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
+                    case 30:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
+                    case 40:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
+                    case 50:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
                 }
 
-                if (col == 7 && row < _horizontalPath)
+                switch (j)
                 {
-                    //GenerateBuilding(row, col);
-                    GenerateRoad(row, col);
-                    cells[row, col] = 1;
-                }
-
-                if (number % 2 == 0 && cells[row, col] == 0)
-                {
-                    GenerateBuilding(row, col);
-                    cells[row, col] = 1;
+                    case 1:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
+                    case 10:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
+                    case 20:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
+                    case 30:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
+                    case 40:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
+                    case 50:
+                        GenerateRoad(i, j);
+                        cells[i, j] = 1;
+                        break;
                 }
             }
         }
 
-
-        for (int row = 0; row < rows; row++)
+        // Loop to generate buildings
+        for (int i = 0; i < rows; i++)
         {
-            for (int col = 0; col < columns; col++)
+            for (int j = 0; j < columns; j++)
             {
-                Debug.Log(cells[row, col]);
+                var number = Random.Range(0, 10);
+                // Generates building
+                if (number % 2 == 0 && i >= 20 && i <= 30 && j >= 20 && j <= 30 && cells[i, j] == 0)
+                {
+                    GenerateBuilding(i, j, 15f);
+                    cells[i, j] = 1;
+                }
+                if (number % 2 == 0 && i >= 10 && i <= 40 && j >= 10 && j <= 40 && cells[i, j] == 0)
+                {
+                    GenerateBuilding(i, j, 10f);
+                    cells[i, j] = 1;
+                }
+                if (number % 2 == 0 && i >= 0 && i <= 50 && j >= 0 && j <= 50 && cells[i, j] == 0)
+                {
+                    GenerateBuilding(i, j, 5f);
+                    cells[i, j] = 1;
+                }
+                if (number % 2 == 0 && cells[i, j] == 0)
+                {                    
+                    //GenerateBuilding(i, j, 3f);
+                    cells[i, j] = 1;                                                       
+                }
             }
         }
     }
-
     // Generate placeholder building
-    void GenerateBuilding(int row, int col)
+    void GenerateBuilding(int row, int col, float height)
     {
         Vector3 buildingposition = new Vector3(col, 1, row);
         Instantiate(testBuilding, buildingposition, Quaternion.identity, transform);
+        testBuilding.transform.localScale = new Vector3(1f,height,1f);
+        int randomIndex = Random.Range(0, buildingMat.Length);
+        testBuilding.GetComponent<Renderer>().material = buildingMat[randomIndex];
     }
 
     void GenerateRoad(int row, int col)
