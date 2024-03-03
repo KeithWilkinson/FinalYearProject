@@ -14,11 +14,9 @@ public class Grid : MonoBehaviour
     private int _verticalPath;
     private int _horizontalPath;
     public Material[] buildingMat;
-  
+ 
     void Start()
     {
-        //_verticalPath = columns;
-        //_horizontalPath = rows;
         GenerateGrid();
     }
 
@@ -43,7 +41,7 @@ public class Grid : MonoBehaviour
                         break;
                     case 10:
                         GenerateRoad(i, j);
-                        cells[i, j] = 1;
+                        cells[i, j] = 1;   
                         break;
                     case 20:
                         GenerateRoad(i, j);
@@ -92,7 +90,6 @@ public class Grid : MonoBehaviour
                 }
             }
         }
-
         // Loop to generate buildings
         for (int i = 0; i < rows; i++)
         {
@@ -100,12 +97,12 @@ public class Grid : MonoBehaviour
             {
                 var number = Random.Range(0, 10);
                 // Generates building
-                if (number % 2 == 0 && i >= 20 && i <= 30 && j >= 20 && j <= 30 && cells[i, j] == 0)
+                if (number % 2 == 0 && i >= 20 && i <= 30 && j >= 20 && j <= 30 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j))
                 {
                     GenerateBuilding(i, j, 15f);
                     cells[i, j] = 1;
                 }
-                if (number % 2 == 0 && i >= 10 && i <= 40 && j >= 10 && j <= 40 && cells[i, j] == 0)
+                if (number % 2 == 0 && i >= 10 && i <= 40 && j >= 10 && j <= 40 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j))
                 {
                     GenerateBuilding(i, j, 10f);
                     cells[i, j] = 1;
@@ -115,11 +112,6 @@ public class Grid : MonoBehaviour
                     GenerateBuilding(i, j, 5f);
                     cells[i, j] = 1;
                 }
-                if (number % 2 == 0 && cells[i, j] == 0)
-                {                    
-                    //GenerateBuilding(i, j, 3f);
-                    cells[i, j] = 1;                                                       
-                }
             }
         }
     }
@@ -128,7 +120,7 @@ public class Grid : MonoBehaviour
     {
         Vector3 buildingposition = new Vector3(col, 1, row);
         Instantiate(testBuilding, buildingposition, Quaternion.identity, transform);
-        testBuilding.transform.localScale = new Vector3(1f,height,1f);
+        testBuilding.transform.localScale = new Vector3(Random.Range(0.75f,1f),height,Random.Range(0.75f,1f));
         int randomIndex = Random.Range(0, buildingMat.Length);
         testBuilding.GetComponent<Renderer>().material = buildingMat[randomIndex];
     }
@@ -137,5 +129,14 @@ public class Grid : MonoBehaviour
     {
         Vector3 roadgposition = new Vector3(col, 0, row);
         Instantiate(testRoad, roadgposition, Quaternion.identity, transform);
+    }
+
+    // Check if cells around building is empty
+    bool NeighboringCellsEmpty(int row, int col)
+    {
+        return (row == 0 || cells[row - 1, col] == 0) &&
+               (row == rows - 1 || cells[row + 1, col] == 0) &&
+               (col == 0 || cells[row, col - 1] == 0) &&
+               (col == columns - 1 || cells[row, col + 1] == 0);
     }
 }
