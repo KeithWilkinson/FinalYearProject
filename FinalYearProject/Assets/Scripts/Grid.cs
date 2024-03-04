@@ -11,16 +11,17 @@ public class Grid : MonoBehaviour
     public GameObject testBuilding;
     public GameObject testRoad;
     private int[,] cells = new int[rows, columns];
-    private int _verticalPath;
-    private int _horizontalPath;
     public Material[] buildingMat;
- 
+    private int _buildingCount = 0;
+    private int _roadCount = 0;
+
+    // Start generation algorithm
     void Start()
     {
-        //DestroyCity();
-        GenerateGrid();
+        GenerateGrid();      
     }
 
+    // Check for input to re-generate
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Return))
@@ -29,10 +30,11 @@ public class Grid : MonoBehaviour
             GenerateGrid();
         }
     }
+
     // Generate grid rows and columns
     void GenerateGrid()
     {
-        var roadGenRandom = Random.Range(7, 25);
+        var roadGenRandom = Random.Range(10, 25);
 
         for (int i = 0; i < rows; i++)
         {
@@ -41,13 +43,14 @@ public class Grid : MonoBehaviour
                 // Generates grid
                 Vector3 position = new Vector3(j, 0, i);
                 Instantiate(gridObject, position, Quaternion.identity, transform);
-
                 cells[i, j] = 0;
 
+                // Handle road generation calculation
                 if (i % roadGenRandom == 0 || j % roadGenRandom == 0)
                 {
                     GenerateRoad(i, j);
                     cells[i, j] = 1;
+                    _roadCount++;
                 }
             }
         }
@@ -60,22 +63,30 @@ public class Grid : MonoBehaviour
                 // Generates building
                 if (number % 2 == 0 && i >= 20 && i <= 30 && j >= 20 && j <= 30 && cells[i, j] == 0 && NeighboringCellsEmpty(i,j,1))
                 {
-                    GenerateBuilding(i, j, 15f);
+                    GenerateBuilding(i, j, Random.Range(20f,25f));
                     cells[i, j] = 1;
+                    _buildingCount++;
                 }
                 if (number % 2 == 0 && i >= 10 && i <= 40 && j >= 10 && j <= 40 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j, 1))
                 {
-                    GenerateBuilding(i, j, 10f);
+                    GenerateBuilding(i, j, Random.Range(10f,15f));
                     cells[i, j] = 1;
+                    _buildingCount++;
                 }
                 if (number % 2 == 0 && i >= 0 && i <= 50 && j >= 0 && j <= 50 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j, 1))
                 {
-                    GenerateBuilding(i, j, 5f);
+                    GenerateBuilding(i, j, Random.Range(1f,5f));
                     cells[i, j] = 1;
+                    _buildingCount++;
                 }
             }
         }
+
+        // Print out building and road counts
+        Debug.Log(_buildingCount);
+        Debug.Log(_roadCount);
     }
+
     // Generate placeholder building
     void GenerateBuilding(int row, int col, float height)
     {
@@ -86,6 +97,7 @@ public class Grid : MonoBehaviour
         testBuilding.GetComponent<Renderer>().material = buildingMat[randomIndex];
     }
 
+    // Generate road at point
     void GenerateRoad(int row, int col)
     {
         Vector3 roadgposition = new Vector3(col, 0, row);
@@ -116,6 +128,9 @@ public class Grid : MonoBehaviour
     // Utility function for clearing the grid 
     void ClearGrid()
     {
+        _buildingCount = 0;
+        _roadCount = 0;
+
         foreach (Transform child in transform)
         {
             Destroy(child.gameObject);
