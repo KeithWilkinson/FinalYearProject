@@ -17,12 +17,23 @@ public class Grid : MonoBehaviour
  
     void Start()
     {
+        //DestroyCity();
         GenerateGrid();
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            ClearGrid();
+            GenerateGrid();
+        }
+    }
     // Generate grid rows and columns
     void GenerateGrid()
     {
+        var roadGenRandom = Random.Range(7, 25);
+
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < columns; j++)
@@ -33,60 +44,10 @@ public class Grid : MonoBehaviour
 
                 cells[i, j] = 0;
 
-                switch (i)
+                if (i % roadGenRandom == 0 || j % roadGenRandom == 0)
                 {
-                    case 1:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;
-                        break;
-                    case 10:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;   
-                        break;
-                    case 20:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;
-                        break;
-                    case 30:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;
-                        break;
-                    case 40:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;
-                        break;
-                    case 50:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;
-                        break;
-                }
-
-                switch (j)
-                {
-                    case 1:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;
-                        break;
-                    case 10:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;
-                        break;
-                    case 20:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;
-                        break;
-                    case 30:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;
-                        break;
-                    case 40:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;
-                        break;
-                    case 50:
-                        GenerateRoad(i, j);
-                        cells[i, j] = 1;
-                        break;
+                    GenerateRoad(i, j);
+                    cells[i, j] = 1;
                 }
             }
         }
@@ -97,17 +58,17 @@ public class Grid : MonoBehaviour
             {
                 var number = Random.Range(0, 10);
                 // Generates building
-                if (number % 2 == 0 && i >= 20 && i <= 30 && j >= 20 && j <= 30 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j))
+                if (number % 2 == 0 && i >= 20 && i <= 30 && j >= 20 && j <= 30 && cells[i, j] == 0 && NeighboringCellsEmpty(i,j,1))
                 {
                     GenerateBuilding(i, j, 15f);
                     cells[i, j] = 1;
                 }
-                if (number % 2 == 0 && i >= 10 && i <= 40 && j >= 10 && j <= 40 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j))
+                if (number % 2 == 0 && i >= 10 && i <= 40 && j >= 10 && j <= 40 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j, 1))
                 {
                     GenerateBuilding(i, j, 10f);
                     cells[i, j] = 1;
                 }
-                if (number % 2 == 0 && i >= 0 && i <= 50 && j >= 0 && j <= 50 && cells[i, j] == 0)
+                if (number % 2 == 0 && i >= 0 && i <= 50 && j >= 0 && j <= 50 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j, 1))
                 {
                     GenerateBuilding(i, j, 5f);
                     cells[i, j] = 1;
@@ -120,7 +81,7 @@ public class Grid : MonoBehaviour
     {
         Vector3 buildingposition = new Vector3(col, 1, row);
         Instantiate(testBuilding, buildingposition, Quaternion.identity, transform);
-        testBuilding.transform.localScale = new Vector3(Random.Range(0.75f,1f),height,Random.Range(0.75f,1f));
+        testBuilding.transform.localScale = new Vector3(Random.Range(1f,2f),height,Random.Range(1f,2f));
         int randomIndex = Random.Range(0, buildingMat.Length);
         testBuilding.GetComponent<Renderer>().material = buildingMat[randomIndex];
     }
@@ -132,11 +93,41 @@ public class Grid : MonoBehaviour
     }
 
     // Check if cells around building is empty
-    bool NeighboringCellsEmpty(int row, int col)
+    bool NeighboringCellsEmpty(int row, int col,int gapSize)
     {
-        return (row == 0 || cells[row - 1, col] == 0) &&
-               (row == rows - 1 || cells[row + 1, col] == 0) &&
-               (col == 0 || cells[row, col - 1] == 0) &&
-               (col == columns - 1 || cells[row, col + 1] == 0);
+        for (int i = -gapSize; i <= gapSize; i++)
+        {
+            for (int j = -gapSize; j <= gapSize; j++)
+            {
+                int newRow = row + i;
+                int newCol = col + j;
+
+                if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns &&
+                    cells[newRow, newCol] == 1)
+                {
+                    return false; // At least one neighboring cell has a building
+                }
+            }
+        }
+
+        return true;
+    }
+
+    // Utility function for clearing the grid 
+    void ClearGrid()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Reset the cells array to mark all cells as empty
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                cells[i, j] = 0;
+            }
+        }
     }
 }
