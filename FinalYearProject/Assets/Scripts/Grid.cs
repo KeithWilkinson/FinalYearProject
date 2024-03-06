@@ -5,8 +5,8 @@ using UnityEngine;
 // Object "GridOrigin" is the point from which the grid is generated from
 public class Grid : MonoBehaviour
 {
-    public static int rows = 100;
-    public static int columns = 100;
+    public static int rows = 200;
+    public static int columns = 200;
     public GameObject gridObject;
     public GameObject testBuilding;
     public GameObject testRoad;
@@ -34,7 +34,7 @@ public class Grid : MonoBehaviour
     // Generate grid rows and columns
     void GenerateGrid()
     {
-        var roadGenRandom = Random.Range(10, 50);
+        var roadGenRandom = Random.Range(20, 100);
 
         for (int i = 0; i < rows; i++)
         {
@@ -61,19 +61,19 @@ public class Grid : MonoBehaviour
             {
                 var number = Random.Range(0, 10);
                 // Generates building
-                if (number % 2 == 0 && i >= 20 && i <= 60 && j >= 40 && j <= 60 && cells[i, j] == 0 && NeighboringCellsEmpty(i,j,2))
+                if (number % 2 == 0 && i >= 40 && i <= 120 && j >= 80 && j <= 120 && cells[i, j] == 0 && NeighboringCellsEmpty(i,j,3))
                 {
                     GenerateBuilding(i, j, Random.Range(20f,25f));
                     cells[i, j] = 1;
                     _buildingCount++;
                 }
-                if (number % 2 == 0 && i >= 10 && i <= 80 && j >= 20 && j <= 80 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j, 2))
+                if (number % 2 == 0 && i >= 20 && i <= 160 && j >= 20 && j <= 160 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j, 3))
                 {
                     GenerateBuilding(i, j, Random.Range(10f,15f));
                     cells[i, j] = 1;
                     _buildingCount++;
                 }
-                if (number % 2 == 0 && i >= 0 && i <= 100 && j >= 0 && j <= 100 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j, 2))
+                if (number % 2 == 0 && i >= 0 && i <= 200 && j >= 0 && j <= 200 && cells[i, j] == 0 && NeighboringCellsEmpty(i, j, 3))
                 {
                     GenerateBuilding(i, j, Random.Range(1f,5f));
                     cells[i, j] = 1;
@@ -83,17 +83,17 @@ public class Grid : MonoBehaviour
         }
 
         // Print out building and road counts
-        Debug.Log(_buildingCount);
-        Debug.Log(_roadCount);
+        Debug.Log("Buildings generated - " + _buildingCount);
+        Debug.Log("Road pieces generated - " + _roadCount);
     }
 
     // Generate placeholder building
     void GenerateBuilding(int row, int col, float height)
     {
-        Vector3 rotationAngles = new Vector3(0f, 0f, 0f);
+        Vector3 rotationAngles = new Vector3(0f, Random.Range(0f,10f), 0f);
         Vector3 buildingposition = new Vector3(col, 1, row);
         Instantiate(testBuilding, buildingposition, Quaternion.Euler(rotationAngles), transform);
-        testBuilding.transform.localScale = new Vector3(Random.Range(1f,3f),height,Random.Range(1f,3f));
+        testBuilding.transform.localScale = new Vector3(Random.Range(1f,3.5f),height,Random.Range(1f,3.5f));
         int randomIndex = Random.Range(0, buildingMat.Length);
         testBuilding.GetComponent<Renderer>().material = buildingMat[randomIndex];
     }
