@@ -12,6 +12,7 @@ public class Grid : MonoBehaviour
     public GameObject testRoad;
     private int[,] cells = new int[rows, columns];
     public Material[] buildingMat;
+    public GameObject[] modelArray;
     private int _buildingCount = 0;
     private int _roadCount = 0;
 
@@ -66,7 +67,7 @@ public class Grid : MonoBehaviour
                     float distanceFromCenter = Vector2.Distance(new Vector2(i, j), center);
                     float size = Mathf.Lerp(15f, 5f, distanceFromCenter / (Mathf.Max(rows, columns) / 5f));
                     Debug.Log(distanceFromCenter);
-                    GenerateBuilding(i, j, size);
+                    GenerateBuilding(i, j, size,distanceFromCenter);
                     cells[i, j] = 1;
                     _buildingCount++;
                 }
@@ -79,14 +80,33 @@ public class Grid : MonoBehaviour
     }
 
     // Generate placeholder building
-    void GenerateBuilding(int row, int col, float height)
+    void GenerateBuilding(int row, int col, float height, float distanceFromCenter)
     {
         Vector3 rotationAngles = new Vector3(0f, Random.Range(0f,10f), 0f);
         Vector3 buildingposition = new Vector3(col, 1, row);
-        Instantiate(testBuilding, buildingposition, Quaternion.identity, transform);
-        testBuilding.transform.localScale = new Vector3(Random.Range(2f,4f),height,Random.Range(2f,4f));
         int randomIndex = Random.Range(0, buildingMat.Length);
-        testBuilding.GetComponent<Renderer>().material = buildingMat[randomIndex];
+        // Inner ring
+        if (distanceFromCenter <= 200 / 4)
+        {
+            Instantiate(modelArray[0], buildingposition, Quaternion.identity, transform);
+            modelArray[0].transform.localScale = new Vector3(Random.Range(2f, 4f), height, Random.Range(2f, 4f));
+            modelArray[0].GetComponent<Renderer>().material = buildingMat[0];
+        }
+        // Outer ring
+        else if (distanceFromCenter <= 200 / 3)
+        {
+            Instantiate(modelArray[2], buildingposition, Quaternion.identity, transform);
+            modelArray[2].transform.localScale = new Vector3(Random.Range(2f, 4f), height, Random.Range(2f, 4f));
+            modelArray[2].GetComponent<Renderer>().material = buildingMat[2];
+        }
+        // Far ring
+        else
+        {
+            Instantiate(modelArray[1], buildingposition, Quaternion.identity, transform);
+            modelArray[1].transform.localScale = new Vector3(Random.Range(2f, 4f), height, Random.Range(2f, 4f));
+            modelArray[1].GetComponent<Renderer>().material = buildingMat[1];
+        }
+
     }
 
     // Generate road at point
