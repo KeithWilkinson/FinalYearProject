@@ -12,7 +12,9 @@ public class Grid : MonoBehaviour
     public GameObject testRoad;
     private int[,] cells = new int[rows, columns];
     public Material[] buildingMat;
-    public GameObject[] modelArray;
+    [SerializeField] private GameObject[] _smallBuildingArray;
+    [SerializeField] private GameObject[] _lowBuildingArray;
+    [SerializeField] private GameObject[] _skyscraperArray;
     private int _buildingCount = 0;
     private int _roadCount = 0;
 
@@ -66,45 +68,47 @@ public class Grid : MonoBehaviour
                 {
                     float distanceFromCenter = Vector2.Distance(new Vector2(i, j), center);
                     float size = Mathf.Lerp(15f, 5f, distanceFromCenter / (Mathf.Max(rows, columns) / 5f));
-                    Debug.Log(distanceFromCenter);
-                    GenerateBuilding(i, j, size,distanceFromCenter);
+                    GenerateBuilding(i, j, size,distanceFromCenter, Random.Range(1,3));
                     cells[i, j] = 1;
                     _buildingCount++;
                 }
             }
         }
-
+        
         // Print out building and road counts
         Debug.Log("Buildings generated - " + _buildingCount);
         Debug.Log("Road pieces generated - " + _roadCount);
     }
 
     // Generate placeholder building
-    void GenerateBuilding(int row, int col, float height, float distanceFromCenter)
+    void GenerateBuilding(int row, int col, float height, float distanceFromCenter, int index)
     {
+        int randomBuildingIndex = Random.Range(0, 6);
+        
+        print(randomBuildingIndex);
         Vector3 rotationAngles = new Vector3(0f, Random.Range(0f,10f), 0f);
         Vector3 buildingposition = new Vector3(col, 1, row);
         int randomIndex = Random.Range(0, buildingMat.Length);
         // Inner ring
         if (distanceFromCenter <= 200 / 4)
         {
-            Instantiate(modelArray[0], buildingposition, Quaternion.identity, transform);
-            modelArray[0].transform.localScale = new Vector3(Random.Range(2f, 4f), height, Random.Range(2f, 4f));
-            modelArray[0].GetComponent<Renderer>().material = buildingMat[0];
+            Instantiate(_skyscraperArray[randomBuildingIndex], buildingposition, Quaternion.identity, transform);
+            _skyscraperArray[randomBuildingIndex].transform.localScale = new Vector3(Random.Range(2f, 4f), height, Random.Range(2f, 4f));
+            _skyscraperArray[randomBuildingIndex].GetComponent<Renderer>().material = buildingMat[0];
         }
         // Outer ring
         else if (distanceFromCenter <= 200 / 3)
         {
-            Instantiate(modelArray[2], buildingposition, Quaternion.identity, transform);
-            modelArray[2].transform.localScale = new Vector3(Random.Range(2f, 4f), height, Random.Range(2f, 4f));
-            modelArray[2].GetComponent<Renderer>().material = buildingMat[2];
+            Instantiate(_lowBuildingArray[randomBuildingIndex], buildingposition, Quaternion.identity, transform);
+            _lowBuildingArray[randomBuildingIndex].transform.localScale = new Vector3(Random.Range(2f, 4f), height, Random.Range(2f, 4f));
+            _lowBuildingArray[randomBuildingIndex].GetComponent<Renderer>().material = buildingMat[1];
         }
         // Far ring
         else
         {
-            Instantiate(modelArray[1], buildingposition, Quaternion.identity, transform);
-            modelArray[1].transform.localScale = new Vector3(Random.Range(2f, 4f), height, Random.Range(2f, 4f));
-            modelArray[1].GetComponent<Renderer>().material = buildingMat[1];
+            Instantiate(_smallBuildingArray[randomBuildingIndex], buildingposition, Quaternion.identity, transform);
+            _smallBuildingArray[randomBuildingIndex].transform.localScale = new Vector3(4, height * 2, 4);
+            _smallBuildingArray[randomBuildingIndex].GetComponent<Renderer>().material = buildingMat[2];
         }
 
     }
