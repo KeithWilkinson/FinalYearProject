@@ -55,6 +55,7 @@ public class Grid : MonoBehaviour
                     GenerateRoad(i, j);
                     cells[i, j] = 1;
                     _roadCount++;
+
                 }
             }
         }
@@ -86,29 +87,32 @@ public class Grid : MonoBehaviour
         int randomBuildingIndex = Random.Range(0, 6);
         
         print(randomBuildingIndex);
-        Vector3 rotationAngles = new Vector3(0f, Random.Range(0f,10f), 0f);
         Vector3 buildingposition = new Vector3(col, 1, row);
         int randomIndex = Random.Range(0, buildingMat.Length);
+        float[] rotationOptions = {0f, 90f, 180f, 270f, 360f };
+        Vector3 rotationAngles = new Vector3(0f, rotationOptions[Random.Range(0, rotationOptions.Length)], 0);
+        var ran = Random.Range(3, 6);
         // Inner ring
         if (distanceFromCenter <= 200 / 4)
         {
             Instantiate(_skyscraperArray[randomBuildingIndex], buildingposition, Quaternion.identity, transform);
-            _skyscraperArray[randomBuildingIndex].transform.localScale = new Vector3(Random.Range(2f, 4f), height, Random.Range(2f, 4f));
-            _skyscraperArray[randomBuildingIndex].GetComponent<Renderer>().material = buildingMat[0];
+            _skyscraperArray[randomBuildingIndex].transform.localScale = new Vector3(ran, ran, ran);
+            _skyscraperArray[randomBuildingIndex].GetComponent<Renderer>().material = buildingMat[Random.Range(0, buildingMat.Length)];
         }
         // Outer ring
         else if (distanceFromCenter <= 200 / 3)
         {
             Instantiate(_lowBuildingArray[randomBuildingIndex], buildingposition, Quaternion.identity, transform);
-            _lowBuildingArray[randomBuildingIndex].transform.localScale = new Vector3(Random.Range(2f, 4f), height, Random.Range(2f, 4f));
-            _lowBuildingArray[randomBuildingIndex].GetComponent<Renderer>().material = buildingMat[1];
+            _lowBuildingArray[randomBuildingIndex].transform.localScale = new Vector3(ran, ran, ran);
+            _lowBuildingArray[randomBuildingIndex].GetComponent<Renderer>().material = buildingMat[Random.Range(0, buildingMat.Length)];
         }
         // Far ring
         else
         {
-            Instantiate(_smallBuildingArray[randomBuildingIndex], buildingposition, Quaternion.identity, transform);
-            _smallBuildingArray[randomBuildingIndex].transform.localScale = new Vector3(4, height * 2, 4);
-            _smallBuildingArray[randomBuildingIndex].GetComponent<Renderer>().material = buildingMat[2];
+            
+            Instantiate(_smallBuildingArray[randomBuildingIndex], buildingposition, Quaternion.Euler(rotationAngles), transform);
+            _smallBuildingArray[randomBuildingIndex].transform.localScale = new Vector3(ran, ran, ran);
+            _smallBuildingArray[randomBuildingIndex].GetComponent<Renderer>().material = buildingMat[Random.Range(0, buildingMat.Length)];
         }
 
     }
