@@ -45,7 +45,7 @@ public class Grid : MonoBehaviour
             for (int j = 0; j < columns; j++)
             {
                 // Generates grid
-                Vector3 position = new Vector3(j, 0, i);
+                Vector3 position = new Vector3(j, 0.5f, i);
                 Instantiate(gridObject, position, Quaternion.identity, transform);
                 cells[i, j] = 0;
 

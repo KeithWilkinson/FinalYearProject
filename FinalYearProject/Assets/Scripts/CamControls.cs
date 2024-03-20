@@ -5,9 +5,7 @@ using UnityEngine;
 public class CamControls : MonoBehaviour
 {
     public float sensitivity;
-    public float slowSpeed;
-    public float normalSpeed;
-    public float sprintSpeed;
+    public float camMoveSpeed;
     float currentSpeed;
 
     void Update()
@@ -38,18 +36,8 @@ public class CamControls : MonoBehaviour
     public void Movement()
     {
         Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            currentSpeed = sprintSpeed;
-        }
-        else if (Input.GetKey(KeyCode.LeftAlt))
-        {
-            currentSpeed = slowSpeed;
-        }
-        else
-        {
-            currentSpeed = normalSpeed;
-        }
+        currentSpeed = camMoveSpeed;
+        
         transform.Translate(input * currentSpeed * Time.deltaTime);
     }
 }
