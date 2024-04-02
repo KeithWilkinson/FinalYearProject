@@ -18,6 +18,8 @@ public class Grid : MonoBehaviour
     private int _buildingCount = 0;
     private int _roadCount = 0;
 
+    [SerializeField] private GameObject _testTree;
+
     // Start generation algorithm
     void Start()
     {
@@ -39,7 +41,6 @@ public class Grid : MonoBehaviour
     {
         var roadGenRandom = Random.Range(25, 50);
         Vector2 center = new Vector2(rows / 2, columns / 2);
-
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < columns; j++)
@@ -55,7 +56,11 @@ public class Grid : MonoBehaviour
                     GenerateRoad(i, j);
                     cells[i, j] = 1;
                     _roadCount++;
-
+                    GenerateTree(i, j);
+                    //if(ran == 4)
+                    //{
+                    //    Instantiate(_testTree, new Vector3(i + 1, 0, j), Quaternion.identity);
+                    //}
                 }
             }
         }
@@ -120,7 +125,7 @@ public class Grid : MonoBehaviour
     // Generate road at point
     void GenerateRoad(int row, int col)
     {
-        Vector3 roadgposition = new Vector3(col, 0, row);
+        Vector3 roadgposition = new Vector3(col, 0.5f, row);
         Instantiate(testRoad, roadgposition, Quaternion.identity, transform);
     }
 
@@ -165,6 +170,16 @@ public class Grid : MonoBehaviour
             {
                 cells[i, j] = 0;
             }
+        }
+    }
+
+    // Function to generate road side decorations
+    void GenerateTree(int row, int col)
+    {
+        var ran = Random.Range(1, 20);
+        if (ran == 5)
+        {
+            Instantiate(_testTree, new Vector3(row + 2, 0, col - 2), Quaternion.identity);
         }
     }
 }
