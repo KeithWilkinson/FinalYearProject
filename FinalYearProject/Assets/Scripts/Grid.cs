@@ -19,6 +19,9 @@ public class Grid : MonoBehaviour
     private int _roadCount = 0;
 
     [SerializeField] private GameObject _testTree;
+    [SerializeField] private GameObject[] _roadsideDecorations;
+
+    [SerializeField] private GameObject _testObject;
 
     // Start generation algorithm
     void Start()
@@ -86,7 +89,7 @@ public class Grid : MonoBehaviour
         Debug.Log("Road pieces generated - " + _roadCount);
     }
 
-    // Generate placeholder building
+    // Generate building
     void GenerateBuilding(int row, int col, float height, float distanceFromCenter, int index)
     {
         int randomBuildingIndex = Random.Range(0, 6);
@@ -114,7 +117,6 @@ public class Grid : MonoBehaviour
         // Far ring
         else
         {
-            
             Instantiate(_smallBuildingArray[randomBuildingIndex], buildingposition, Quaternion.Euler(rotationAngles), transform);
             _smallBuildingArray[randomBuildingIndex].transform.localScale = new Vector3(ran, ran, ran);
             _smallBuildingArray[randomBuildingIndex].GetComponent<Renderer>().material = buildingMat[Random.Range(0, buildingMat.Length)];
@@ -177,9 +179,11 @@ public class Grid : MonoBehaviour
     void GenerateTree(int row, int col)
     {
         var ran = Random.Range(1, 20);
+        int ranDecoration = Random.Range(0, _roadsideDecorations.Length);
+        GameObject randomObject = _roadsideDecorations[ranDecoration];
         if (ran == 5)
         {
-            Instantiate(_testTree, new Vector3(row + 2, 0, col - 2), Quaternion.identity);
+            Instantiate(randomObject, new Vector3(row + 2, 0, col - 2), Quaternion.identity);
         }
     }
 }
