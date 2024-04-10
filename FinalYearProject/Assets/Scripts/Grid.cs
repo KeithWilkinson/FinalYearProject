@@ -60,10 +60,12 @@ public class Grid : MonoBehaviour
                     cells[i, j] = 1;
                     _roadCount++;
                     GenerateTree(i, j);
-                    //if(ran == 4)
+                    //if(j == 0 && j % roadGenRandom == 0)
                     //{
-                    //    Instantiate(_testTree, new Vector3(i + 1, 0, j), Quaternion.identity);
+                    //    Vector3 carposition = new Vector3(i, 0.5f, j);
+                    //    Instantiate(testBuilding, carposition, Quaternion.identity);
                     //}
+                    
                 }
             }
         }
@@ -178,12 +180,13 @@ public class Grid : MonoBehaviour
     // Function to generate road side decorations
     void GenerateTree(int row, int col)
     {
-        var ran = Random.Range(1, 20);
+        var ran = Random.Range(1, 15);
         int ranDecoration = Random.Range(0, _roadsideDecorations.Length);
         GameObject randomObject = _roadsideDecorations[ranDecoration];
         if (ran == 5)
         {
-            Instantiate(randomObject, new Vector3(row + 2, 0, col - 2), Quaternion.identity);
+            cells[row, col] = 1;
+            Instantiate(randomObject, new Vector3(row + 3, 0, col - 3), Quaternion.identity);
         }
     }
 }
