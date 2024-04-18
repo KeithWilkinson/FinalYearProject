@@ -101,7 +101,7 @@ public class Grid : MonoBehaviour
         int randomIndex = Random.Range(0, buildingMat.Length);
         float[] rotationOptions = {0f, 90f, 180f, 270f, 360f };
         Vector3 rotationAngles = new Vector3(0f, rotationOptions[Random.Range(0, rotationOptions.Length)], 0);
-        var ran = Random.Range(3, 6);
+        var ran = Random.Range(4, 6);
         // Inner ring
         if (distanceFromCenter <= 200 / 4)
         {

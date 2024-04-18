@@ -14,6 +14,9 @@ public class CarControls : MonoBehaviour
     private float rotationX = 0;
     private CharacterController characterController;
 
+    private bool _carCam = true;
+    [SerializeField] private Camera _mainCam;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -23,20 +26,43 @@ public class CarControls : MonoBehaviour
 
     void Update()
     {
-        Vector3 forward = transform.TransformDirection(Vector3.forward);
-        Vector3 right = transform.TransformDirection(Vector3.right);
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            if(_carCam == true)
+            {
+                _carCam = false;
+                _mainCam.enabled = true;
+                playerCamera.enabled = false;
+            }
+            else
+            {
+                _carCam = true;
+                _mainCam.enabled = false;
+                playerCamera.enabled = true;
+            }
+        }
+        if(_carCam == true)
+        {
+            Vector3 forward = transform.TransformDirection(Vector3.forward);
+            Vector3 right = transform.TransformDirection(Vector3.right);
 
-        float curSpeedX = walkSpeed * Input.GetAxis("Vertical");
-        float curSpeedY = walkSpeed * Input.GetAxis("Horizontal");
-        float movementDirectionY = moveDirection.y;
-        moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+            float curSpeedX = walkSpeed * Input.GetAxis("Vertical");
+            float curSpeedY = walkSpeed * Input.GetAxis("Horizontal");
+            float movementDirectionY = moveDirection.y;
+            moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-        characterController.Move(moveDirection * Time.deltaTime);
+            characterController.Move(moveDirection * Time.deltaTime);
 
-        rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
-        rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-        playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-        transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+            rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
+            rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
+            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+        }
+        else
+        {
+            playerCamera.enabled = false;
+            _mainCam.enabled = true;
+        }
     }
 }
 

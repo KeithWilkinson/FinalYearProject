@@ -8,6 +8,12 @@ public class CamControls : MonoBehaviour
     public float camMoveSpeed;
     float currentSpeed;
 
+    private void Awake()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+   
     void Update()
     {
         if (Input.GetMouseButton(1)) //if we are holding right click
@@ -19,8 +25,8 @@ public class CamControls : MonoBehaviour
         }
         else
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.visible = true;
+            //Cursor.lockState = CursorLockMode.None;
         }
 
     }
