@@ -355,6 +355,7 @@
 "Assets/Scripts/CamControls.cs"
 "Assets/Scripts/CarControls.cs"
 "Assets/Scripts/Grid.cs"
+"Assets/Scripts/Menu.cs"
 -langversion:9.0
 
 /deterministic

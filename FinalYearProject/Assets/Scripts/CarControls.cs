@@ -16,24 +16,25 @@ public class CarControls : MonoBehaviour
 
     private bool _carCam = true;
     [SerializeField] private Camera _mainCam;
+    public static int carFlag;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Return))
         {
+            // Switch to free cam
             if(_carCam == true)
             {
                 _carCam = false;
                 _mainCam.enabled = true;
                 playerCamera.enabled = false;
             }
+            // Switch to car cam
             else
             {
                 _carCam = true;
@@ -41,6 +42,8 @@ public class CarControls : MonoBehaviour
                 playerCamera.enabled = true;
             }
         }
+
+        // Move car
         if(_carCam == true)
         {
             Vector3 forward = transform.TransformDirection(Vector3.forward);
@@ -58,11 +61,12 @@ public class CarControls : MonoBehaviour
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
-        else
-        {
-            playerCamera.enabled = false;
-            _mainCam.enabled = true;
-        }
+        //// Enable 
+        //else
+        //{
+        //    playerCamera.enabled = false;
+        //    _mainCam.enabled = true;
+        //}
     }
 }
 

@@ -85,10 +85,6 @@ public class Grid : MonoBehaviour
                 }
             }
         }
-        
-        // Print out building and road counts
-        Debug.Log("Buildings generated - " + _buildingCount);
-        Debug.Log("Road pieces generated - " + _roadCount);
     }
 
     // Generate building
@@ -96,7 +92,7 @@ public class Grid : MonoBehaviour
     {
         int randomBuildingIndex = Random.Range(0, 6);
         
-        print(randomBuildingIndex);
+        //print(randomBuildingIndex);
         Vector3 buildingposition = new Vector3(col, 1, row);
         int randomIndex = Random.Range(0, buildingMat.Length);
         float[] rotationOptions = {0f, 90f, 180f, 270f, 360f };

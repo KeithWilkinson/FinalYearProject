@@ -7,30 +7,20 @@ public class CamControls : MonoBehaviour
     public float sensitivity;
     public float camMoveSpeed;
     float currentSpeed;
+    [SerializeField]private GameObject _car;
 
-    private void Awake()
-    {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-   
     void Update()
     {
-        if (Input.GetMouseButton(1)) //if we are holding right click
+        if (Input.GetMouseButton(1) && Menu._hasGameStarted == true && _car.GetComponent<CarControls>().playerCamera.isActiveAndEnabled == false) //if we are holding right click
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             Movement();
             Rotation();
         }
-        else
-        {
-            //Cursor.visible = true;
-            //Cursor.lockState = CursorLockMode.None;
-        }
-
     }
 
+    // Rotate camera
     public void Rotation()
     {
         Vector3 mouseInput = new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
@@ -39,6 +29,7 @@ public class CamControls : MonoBehaviour
         transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, 0);
     }
 
+    // Move camera
     public void Movement()
     {
         Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
