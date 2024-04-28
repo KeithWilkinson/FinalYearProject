@@ -11,10 +11,11 @@ public class CamControls : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(1) && Menu._hasGameStarted == true && _car.GetComponent<CarControls>().playerCamera.isActiveAndEnabled == false) //if we are holding right click
+        // Hide cursor and allows camera movement and rotation
+        if (Input.GetMouseButton(1) && Menu._hasGameStarted == true && _car.GetComponent<CarControls>().playerCamera.isActiveAndEnabled == false) 
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+           // Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
             Movement();
             Rotation();
         }

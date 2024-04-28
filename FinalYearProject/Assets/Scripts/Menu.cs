@@ -12,21 +12,6 @@ public class Menu : MonoBehaviour
     public bool isCarEnabled = false;
     [SerializeField] private GameObject _VFXObject;
 
-    private void Awake()
-    {
-       
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
     // Starts game
     public void StartGame()
     {

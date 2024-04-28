@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Object "GridOrigin" is the point from which the grid is generated from
 public class Grid : MonoBehaviour
@@ -32,10 +33,15 @@ public class Grid : MonoBehaviour
     // Check for input to re-generate
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Return))
+        if(Input.GetKeyDown(KeyCode.R))
         {
             ClearGrid();
             GenerateGrid();
+        }
+
+        if(Input.GetKeyDown(KeyCode.Backspace))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
@@ -59,13 +65,7 @@ public class Grid : MonoBehaviour
                     GenerateRoad(i, j);
                     cells[i, j] = 1;
                     _roadCount++;
-                    GenerateTree(i, j);
-                    //if(j == 0 && j % roadGenRandom == 0)
-                    //{
-                    //    Vector3 carposition = new Vector3(i, 0.5f, j);
-                    //    Instantiate(testBuilding, carposition, Quaternion.identity);
-                    //}
-                    
+                    GenerateTree(i, j);  
                 }
             }
         }
